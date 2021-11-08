@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>user management</title>
+		<script src="./vue.js"></script>
+		<script src="./access_user_rpc.js"></script>
+		<style>
+		        table,table tr th, table tr td { border:1px solid #0094ff; }
+		        table { width: 200px; min-height: 25px; line-height: 25px; text-align: center; border-collapse: collapse;}   
+		</style>
+	</head>
+	<body>
+		<div id="app">
+
+			<p>name:
+				<input v-model = "name"/><br/>
+				age: <input v-model = "age"/><br/></p>
+			
+			<button v-on:click="findUserByNameAndAge">根据名字与年龄查找用户</button>
+			<hr/>
+			
+			<table>
+			    <tr>
+			        <th>ID</th>
+			        <th>name</th>
+			        <th>age</th>
+			    </tr>
+			    <tr v-for="aUser in users2" >
+			        <td >{{aUser.id}}</td>
+			        <td  >{{aUser.name}}</td>
+			        <td >{{aUser.age}}</td>
+			    </tr>
+			</table>
+			
+			<hr/>
+			<p>userId:
+				<input v-model = "userId"/></p>
+			<button v-on:click="findUserById">根据用户id查找用户</button><hr/>
+			<table>
+			    <tr>
+			        <th>ID</th>
+			        <th>name</th>
+			        <th>age</th>
+			    </tr>
+			    <tr>
+			        <td >{{userResult2.id}}</td>
+			        <td >{{userResult2.name}}</td>
+			        <td >{{userResult2.age}}</td>
+			    </tr>
+			</table>
+			<hr/>
+			<p>用户列表：<button v-on:click="getUserList">列出所有用户信息</button></p>
+			<table>
+			    <tr>
+			        <th>ID</th>
+			        <th>name</th>
+			        <th>age</th>
+			    </tr>
+			    <tr v-for="aUser in users" >
+			        <td >{{aUser.id}}</td>
+			        <td >{{aUser.name}}</td>
+			        <td >{{aUser.age}}</td>
+			    </tr>
+			</table>
+			
+			<p>userId:
+				<input v-model = "userId2"/></p>
+			
+			<button v-on:click="deleteUserById">删除此id对应用户</button>
+			
+			
+				
+				<p>
+					id:<input v-model = "idForCreate"/><br/>
+					name:<input v-model = "nameForCreate"/><br/>
+					age: <input v-model = "ageForCreate"/><br/>
+				
+				<button v-on:click="createUser">创建新用户</button></p>
+				
+			
+		</div>
+		
+		<script>
+			let vm = new Vue({
+				el: '#app',
+				data:{
+						msg:"hello,vue",
+						userId:'',
+						name:'',
+						age:'',
+						userId2:'',
+						users2:[],
+						userResult2:{},
+						users:[],
+						idForCreate:'',
+						nameForCreate:'',
+						ageForCreate:''
+						
+				},
+				methods:{
+					findUserById: function(){
+						console.log("button1 clicked");
+						this.user={id:4,name:"john",age:18};
+						findUserById_rpc(this.userId);
+					},
+					findUserByNameAndAge:function(){
+						console.log("button3 clicked");
+						findUserByNameAndAge_rpc(this.name, this.age);
+					},
+					getUserList: function(){
+						console.log("button2 clicked");
+						getUserList_rpc();
+						
+						//getUserList_rpc(this.userId);
+					},
+					deleteUserById:function(){
+						console.log("button4 clcked");
+						deleteUserById_rpc(this.userId2);
+					},
+					createUser:function(){
+						console.log("button5 clcked");
+						let user={};
+						user.id = this.idForCreate;
+						user.name = this.nameForCreate;
+						user.age = this.ageForCreate;
+						createUser_rpc(user);
+					}
+				}
+				
+			});
+			
+			
+			
+		</script>
+		<script src="./access_user_rpc.js"></script>
+	</body>
+</html>
